@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌩️ Simple S3 File Manager
+
+A lightweight, web-based AWS S3 file manager built with dynamic credentials. Easily upload, browse, and delete files or folders in any S3 bucket using credentials stored in `localStorage`.
+
+---
+
+## ✨ Features
+
+- Dynamic S3 credentials via a simple form
+- List all files and folders in your bucket
+- Upload files to specific folders
+- Delete files from S3
+- Credentials stored in `localStorage` (no backend required)
+
+---
+
+## Tech Stack
+
+- Next.js (App Router)
+- AWS SDK v3 (`@aws-sdk/client-s3`)
+- Tailwind CSS
+- TypeScript
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/your-username/s3-file-manager.git
+cd s3-file-manager
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+# or
+yarn install
+```
+
+### 3. Run the development server
 
 ```bash
 npm run dev
 # or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Usage
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. On the homepage, enter your:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Bucket Name
 
-## Learn More
+- Access Key ID
 
-To learn more about Next.js, take a look at the following resources:
+- Secret Access Key
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- AWS Region
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. Click Continue to save credentials in localStorage.
 
-## Deploy on Vercel
+3. Browse files and folders.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. Upload or delete files with one click.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+That's it — you're all set! ✅ Done and dusted.
