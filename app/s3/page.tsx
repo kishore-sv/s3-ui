@@ -140,7 +140,6 @@ export default function S3page() {
         <nav className=" w-full py-4 border-b flex justify-between items-center px-2 lg:px-14 ">
           <div>
             <h1 className=" text-xl font-bold ">
-              {" "}
               {s3Keys.bucketName}`s S3 Bucket
             </h1>
           </div>
@@ -150,7 +149,7 @@ export default function S3page() {
               variant="outline"
               className="cursor-pointer"
             >
-              <LogOutIcon /> Sign Out
+              <LogOutIcon />Remove Keys
             </Button>
             <ModeToggle />
           </div>

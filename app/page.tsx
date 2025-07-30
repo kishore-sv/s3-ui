@@ -304,12 +304,21 @@ export default function Home() {
             </div>
           </div>
 
-          <div className=" w-full  flex flex-col px-10 justify-center items-center mb-3 pb-10 ">
+          <div className=" w-full  flex flex-col justify-center items-center mb-3 ">
             <p>That`s it 🎉,you are set to go.</p>
-            <a href="#" className=" flex justify-center gap-2 group items-center text-blue-400 hover:underline ">
-              Now Go To TOP <ArrowUp className=" w-5 h-5 group-hover:-translate-y-1 transition-transform ease-in-out " />
+            <a
+              href="#"
+              className="flex capitalize justify-center gap-1 group my-3 items-center text-blue-400 hover:underline "
+            >
+              Go To Top
+              <ArrowUp className=" w-5 h-5 group-hover:-translate-y-1 transition-transform ease-in-out " />
             </a>
-            <div className=" flex justify-center items-center gap-4 mt-4 ">
+            <p className="text-sm my-2 text-center text-muted-foreground">
+              Don't worry! We never store your keys on our servers. They're
+              saved only in your browser's local storage — visible and
+              manageable by you alone.
+            </p>
+            <div className=" flex justify-center border-t w-full pt-2 pb-4 items-center gap-4 mt-4 ">
               <Link
                 href="https://github.com/kishore-sv"
                 className=" opacity-50 hover:opacity-[1] flex justify-center items-center gap-1 transition-opacity ease-in-out  "
