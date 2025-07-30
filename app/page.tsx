@@ -2,6 +2,7 @@ import { ModeToggle } from "@/components/toggle-theme-button";
 import Link from "next/link";
 import S3KeysForm from "@/components/s3keysform";
 import { ArrowUp, ExternalLink, GithubIcon } from "lucide-react";
+import Image from "next/image";
 
 export default function Home() {
   return (
@@ -9,7 +10,17 @@ export default function Home() {
       <nav className=" w-full h-18 lg:fixed top-0 gap-18 px-10 flex lg:justify-between items-center lg:px-20 py-2 bg-neutral-50/80 border-b dark:bg-neutral-950/80 backdrop-blur-md ">
         <div className=" w-50 h-full flex items-center ">
           <Link href="/">
-            <h1 className="text-3xl font-bold ">S3 UI</h1>
+            <h1 className="text-3xl font-bold flex items-center gap-2 ">
+              <Image
+                width={50}
+                height={50}
+                loading="lazy"
+                src="/logo.svg"
+                alt="logo"
+                className=" w-10 h-10 rounded-md shrink-0 bg-neutral-950 "
+              />{" "}
+              S3 UI
+            </h1>
           </Link>
         </div>
         <div className="flex items-center gap-4">
@@ -314,8 +325,8 @@ export default function Home() {
               <ArrowUp className=" w-5 h-5 group-hover:-translate-y-1 transition-transform ease-in-out " />
             </a>
             <p className="text-sm my-2 text-center text-muted-foreground">
-              Don't worry! We never store your keys on our servers. They're
-              saved only in your browser's local storage — visible and
+              Don&rsquo;t worry! We never store your keys on our servers. They&rsquo;re
+              saved only in your browser&rsquo;s local storage — visible and
               manageable by you alone.
             </p>
             <div className=" flex justify-center border-t w-full pt-2 pb-4 items-center gap-4 mt-4 ">

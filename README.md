@@ -23,6 +23,8 @@ A lightweight, web-based AWS S3 file manager built with dynamic credentials. Eas
 
 ---
 
+![homepage](/public/home_dark.png)
+
 ## Getting Started
 
 ### 1. Clone the repository
@@ -68,5 +70,4 @@ yarn dev
 
 That's it — you're all set! ✅ Done and dusted.
 
-
-https://docs.aws.amazon.com/AmazonS3/latest/userguide/testing-cors.html
+``Don't worry! We never store your keys on our servers. They'resaved only in your browser's local storage — visible an manageable by you alone.``
