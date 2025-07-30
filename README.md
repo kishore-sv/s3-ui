@@ -67,3 +67,6 @@ yarn dev
 4. Upload or delete files with one click.
 
 That's it — you're all set! ✅ Done and dusted.
+
+
+https://docs.aws.amazon.com/AmazonS3/latest/userguide/testing-cors.html

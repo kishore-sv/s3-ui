@@ -44,9 +44,7 @@ export default function S3KeysForm() {
     localStorage.setItem("accessKey", values.accessKey);
     localStorage.setItem("secrectAccessKey", values.secrectAccessKey);
     localStorage.setItem("region", values.region);
-
     console.log("Saved to localStorage:", values);
-
     router.push("/s3");
   }
   return (

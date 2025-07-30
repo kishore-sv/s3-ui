@@ -1,4 +1,4 @@
-import { getS3Client } from "@/uitils/s3Client";
+import { getS3Client } from "@/utils/s3Client";
 import { ListObjectsV2Command } from "@aws-sdk/client-s3";
 import { NextRequest, NextResponse } from "next/server";
 

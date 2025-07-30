@@ -1,30 +1,15 @@
 "use client";
+import FileComponent from "@/components/file-componenet";
+import FolderComponent from "@/components/folder-component";
 import { ModeToggle } from "@/components/toggle-theme-button";
+import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { getS3Client } from "@/uitils/s3Client";
-import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
-import { useRef } from "react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@radix-ui/react-accordion";
-import {
-  Calendar,
-  ChevronRight,
-  Download,
-  File,
-  Folder,
-  Inbox,
-  Loader2Icon,
-  LogOutIcon,
-  Plus,
-  Trash,
-  Upload,
-} from "lucide-react";
+import { getS3Client } from "@/utils/s3Client";
+import { PutObjectCommand } from "@aws-sdk/client-s3";
+import { Loader2Icon, LogOutIcon, Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 type S3Object = {
   Key?: string;
@@ -32,7 +17,7 @@ type S3Object = {
   LastModified?: string;
 };
 
-type ObjectsResponse = {
+export type ObjectsResponse = {
   files: S3Object[];
   folders: string[];
 };
@@ -40,6 +25,8 @@ type ObjectsResponse = {
 export default function S3page() {
   const [objects, setObjects] = useState<ObjectsResponse | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoadingFileUpload, setIsLoadingFileUpload] =
+    useState<boolean>(false);
   const [s3Keys, setS3Keys] = useState({
     region: "",
     accessKeyId: "",
@@ -77,10 +64,11 @@ export default function S3page() {
         });
 
         if (!res.ok) throw new Error("Failed to fetch");
-
         const data = await res.json();
         setObjects(data);
       } catch (error) {
+        toast.error(`Invaild keys, please check and try again`);
+        router.replace('/')
         console.error("Error fetching objects:", error);
       } finally {
         setIsLoading(false);
@@ -96,6 +84,7 @@ export default function S3page() {
     localStorage.removeItem("secrectAccessKey");
     localStorage.removeItem("bucketName");
     router.replace("/");
+    toast(` Signed Out succeefully! `);
   };
 
   const handleUpload = async () => {
@@ -110,6 +99,7 @@ export default function S3page() {
       console.log("file:", file.name);
 
       try {
+        setIsLoadingFileUpload(true);
         const arrayBuffer = await file.arrayBuffer();
         const buffer = new Uint8Array(arrayBuffer);
 
@@ -132,21 +122,22 @@ export default function S3page() {
 
         const uploadedUrl = `https://${s3Keys.bucketName}.s3.${s3Keys.region}.amazonaws.com/${key}`;
         console.log("✅ Uploaded:", uploadedUrl);
-        router.refresh();
-        alert("Upload successful!");
+        toast.success(` File:${key} uploaded successfully `);
       } catch (err) {
         console.error("❌ Upload error:", err);
-        alert("Upload failed.");
+        toast.error(`Somthing went wrong while uploading:${err}`)
+      } finally {
+        setIsLoadingFileUpload(false);
       }
     };
 
-    input.click(); // open the file dialog
+    input.click(); 
   };
 
   return (
-    <div className=" h-screen w-screen  flex items-center ">
+    <div className=" h-screen w-screen flex items-center ">
       <div className=" w-full h-full">
-        <nav className=" w-full py-4 border-b flex justify-between items-center px-14 ">
+        <nav className=" w-full py-4 border-b flex justify-between items-center px-2 lg:px-14 ">
           <div>
             <h1 className=" text-xl font-bold ">
               {" "}
@@ -165,9 +156,9 @@ export default function S3page() {
           </div>
         </nav>
 
-        <div className=" pb-20 mx-auto w-[50%] border py-3 mt-2 rounded-2xl shadow px-2 ">
-          <div className=" border-b py-3 w-full flex items-center justify-between ">
-            <h2 className=" tetx-xl font-semibold flex items-center gap-3 ml-2 ">
+        <div className=" pb-20 mx-auto w-full lg:w-[50%] border py-3 mt-2 rounded-2xl shadow lg:px-2 ">
+          <div className=" border-b py-3 w-full flex items-center justify-evenly lg:justify-between ">
+            <h2 className="lg:text-xl truncate font-semibold flex flex-col lg:flex-row justify-center lg:justify-normal items-center lg:gap-3 gap-2 ml-2 ">
               <svg
                 width="25px"
                 height="25px"
@@ -212,31 +203,39 @@ export default function S3page() {
                 </g>
               </svg>
               {s3Keys.bucketName}
-              <p className="ml-3 text-[12px] text-neutral-500 ">
-                Total {objects?.files ? objects.files.length - 1 : 0} files /{" "}
-                {objects?.folders ? objects.folders.length : 0} folders
-              </p>
-              <p className="ml-2 text-[12px] text-neutral-500 ">
-                Total Size:{" "}
-                {objects?.files
-                  ? `${(
-                      objects.files.reduce(
-                        (acc, file) => acc + (file.Size || 0),
-                        0
-                      ) /
-                      (1024 * 1024)
-                    ).toFixed(2)} MB`
-                  : "0 MB"}
-              </p>
+              {isLoading ? (
+                <span className="w-30 h-5 rounded bg-neutral-200 dark:bg-neutral-800 animate-pulse " />
+              ) : (
+                <p className="lg:ml-3 text-[10px] lg:text-[12px] text-neutral-500 ">
+                  Total {objects?.files ? objects.files.length : 0} files /{" "}
+                  {objects?.folders ? objects.folders.length : 0} folders
+                </p>
+              )}
+              {isLoading ? (
+                <span className=" w-30 h-5 rounded bg-neutral-200 dark:bg-neutral-800 animate-pulse " />
+              ) : (
+                <p className="lg:ml-2 text-[10px] lg:text-[12px] text-neutral-500 ">
+                  Total Size:{" "}
+                  {objects?.files
+                    ? `${(
+                        objects.files.reduce(
+                          (acc, file) => acc + (file.Size || 0),
+                          0
+                        ) /
+                        (1024 * 1024)
+                      ).toFixed(2)} MB`
+                    : "0 MB"}
+                </p>
+              )}
             </h2>
-            <div className=" px-4 ">
+            <div className="lg:px-4 ">
               <Button
                 onClick={handleUpload}
-                disabled={isLoading}
+                disabled={isLoading && isLoadingFileUpload }
                 variant="outline"
                 className=" cursor-pointer "
               >
-                {isLoading ? (
+                {isLoadingFileUpload ? (
                   <Loader2Icon className=" animate-spin " />
                 ) : (
                   <>
@@ -248,8 +247,8 @@ export default function S3page() {
             </div>
           </div>
 
-          <div className=" w-full px-6 py-4 ">
-            <Accordion type="multiple" className="w-full p-3 ">
+          <div className=" w-full lg:px-6 py-4 ">
+            <Accordion type="multiple" className="w-full p-2 lg:p-3 ">
               <h2 className=" my-3 ">Folders</h2>
               <div className="flex flex-col gap-3 w-full">
                 {isLoading ? (
@@ -267,6 +266,7 @@ export default function S3page() {
             </Accordion>
 
             <div className=" w-full px-2">
+              <h2 className=" my-3 ">Files</h2>
               {isLoading ? (
                 <div className="w-full flex justify-center items-center gap-2">
                   <Loader2Icon className="animate-spin" />
@@ -297,290 +297,5 @@ export default function S3page() {
         </div>
       </div>
     </div>
-  );
-}
-
-function FileComponent({
-  name,
-  time,
-  size,
-  link,
-}: {
-  name?: string;
-  time?: string;
-  size?: number;
-  link?: string;
-}) {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const formatSize = (bytes: number): string => {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-    if (bytes < 1024 * 1024 * 1024)
-      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-    return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
-  };
-
-  const formatDate = (dateString: string): string => {
-    const date = new Date(dateString);
-    return date.toLocaleString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-  };
-
-  const router = useRouter();
-
- const handleFileDelete = async (fileKey: string) => {
-  try {
-    setIsLoading(true);
-
-    const region = localStorage.getItem("region");
-    const accessKeyId = localStorage.getItem("accessKey");
-    const secretAccessKey = localStorage.getItem("secrectAccessKey");
-    const bucketName = localStorage.getItem("bucketName");
-
-    if (!region || !accessKeyId || !secretAccessKey || !bucketName) {
-      return router.replace("/");
-    }
-
-    const s3 = getS3Client({
-      region,
-      accessKeyId,
-      secretAccessKey,
-    });
-
-    const command = new DeleteObjectCommand({
-      Bucket: bucketName,
-      Key: fileKey,
-    });
-
-    await s3.send(command);
-    console.log(`✅ File deleted: ${fileKey}`);
-    alert("File deleted successfully.");
-
-    // ✅ Refresh page data
-    router.refresh();
-  } catch (err) {
-    console.error("❌ Failed to delete file:", err);
-    alert("Failed to delete file.");
-  } finally {
-    setIsLoading(false);
-  }
-};
-
-
-  const signedUrl = `https://kishore-protfolio.s3.eu-north-1.amazonaws.com/${
-    link || name
-  }`;
-  return (
-    <div className="border rounded-md my-2 px-4 py-2 text-balance hover:bg-neutral-100 dark:hover:bg-neutral-800">
-      <div className=" w-full flex justify-between items-center ">
-        <div className=" w-[70%] ">
-          <p className="px-2 w-full overflow-hidden flex items-center gap-2 ">
-            <File className="w-5 h-5 shrink-0 text-neutral-700 dark:text-neutral-200" />{" "}
-            <span className=" text-primary truncate font-medium text-shadow-accent ">
-              {name}
-            </span>
-          </p>
-          <div className="w-full text-sm flex items-center gap-4 text-neutral-500 px-8 pt-2 ">
-            <p className=" flex items-center gap-1 ">
-              <Inbox className=" w-4 h-4 shrink-0 " /> {formatSize(size!)}
-            </p>
-            <p className=" flex items-center gap-1 ">
-              <Calendar className=" w-4 h-4 shrink-0 " />
-              {formatDate(time!)}
-            </p>
-          </div>
-        </div>
-        <div className=" flex items-center gap-3 px-2">
-          <a href={signedUrl}>
-            <Button variant="outline" className=" p-2 cursor-pointer">
-              <Download /> Download
-            </Button>
-          </a>
-          <Button
-            disabled={isLoading}
-            onClick={() => handleFileDelete( link || name!)}
-            variant="destructive"
-            className=" p-2 cursor-pointer"
-          >
-            {isLoading ? <Loader2Icon className=" animate-spin" /> : <Trash />}
-          </Button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function FolderComponent({ id, name }: { id: string; name?: string }) {
-  const [objects, setObjects] = useState<ObjectsResponse | null>(null);
-  const [s3Keys, setS3Keys] = useState({
-    region: "",
-    accessKeyId: "",
-    secretAccessKey: "",
-    bucketName: "",
-  });
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    const fetchObjects = async () => {
-      try {
-        const region = localStorage.getItem("region");
-        const accessKeyId = localStorage.getItem("accessKey");
-        const secretAccessKey = localStorage.getItem("secrectAccessKey");
-        const bucketName = localStorage.getItem("bucketName");
-        if (!region || !accessKeyId || !secretAccessKey || !bucketName) {
-          return router.replace("/");
-        }
-
-        setS3Keys({ region, accessKeyId, secretAccessKey, bucketName });
-        const res = await fetch(`/api/objects?prefix=${name}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            region: localStorage.getItem("region"),
-            accessKeyId: localStorage.getItem("accessKey"),
-            secretAccessKey: localStorage.getItem("secrectAccessKey"),
-            bucketName: localStorage.getItem("bucketName"),
-          }),
-        });
-        if (!res.ok) throw new Error("Failed to fetch");
-        const data = await res.json();
-        setObjects(data);
-      } catch (error) {
-        console.error("Error fetching objects:", error);
-      }
-    };
-
-    fetchObjects();
-  }, []);
-
-  const router = useRouter();
-
-  const handleUploadWithSpecificFolder = async (foldername: string) => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = "*/*";
-
-    input.onchange = async () => {
-      const file = input.files?.[0];
-      if (!file) return;
-
-      console.log("file:", file.name);
-
-      try {
-        setIsLoading(true);
-        const arrayBuffer = await file.arrayBuffer();
-        const buffer = new Uint8Array(arrayBuffer);
-
-        const key = `${foldername}${file.name}`;
-
-        const s3 = getS3Client({
-          region: s3Keys.region,
-          accessKeyId: s3Keys.accessKeyId,
-          secretAccessKey: s3Keys.secretAccessKey,
-        });
-
-        const command = new PutObjectCommand({
-          Bucket: s3Keys.bucketName,
-          Key: key,
-          Body: buffer,
-          ContentType: file.type,
-        });
-
-        await s3.send(command);
-
-        const uploadedUrl = `https://${s3Keys.bucketName}.s3.${s3Keys.region}.amazonaws.com/${key}`;
-        console.log("✅ Uploaded:", uploadedUrl, "key:", key);
-        router.refresh();
-        alert("Upload successful!");
-      } catch (err) {
-        console.error("❌ Upload error:", err);
-        alert("Upload failed.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    input.click();
-  };
-
-  return (
-    <AccordionItem
-      value={id}
-      className=" border rounded-md transition-transform ease-in-out"
-    >
-      <div className="w-full flex items-center hover:bg-neutral-100 dark:hover:bg-neutral-800 rounded-md overflow-hidden">
-        <AccordionTrigger className="group cursor-pointer rounded-md p-1 w-full  ">
-          <div className="h-10 px-4 w-full flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <ChevronRight className="h-6 w-6 transition-transform duration-200 group-data-[state=open]:rotate-90" />
-              <Folder className=" w-7 h-7 shrink-0 text-blue-400 " />
-              <span className="text-primary truncate hover:underline font-medium text-shadow-accent">
-                {name}
-              </span>
-              <p className="ml-3 flex items-center text-[12px] text-neutral-500 ">
-                Total {objects?.files ? objects.files.length - 1 : 0} objects
-              </p>
-            </div>
-          </div>
-        </AccordionTrigger>
-        <Button
-          disabled={isLoading}
-          onClick={() => handleUploadWithSpecificFolder(name!)}
-          variant="outline"
-          className=" cursor-pointer mr-4 "
-        >
-          {isLoading ? (
-            <Loader2Icon className=" animate-spin " />
-          ) : (
-            <>
-              <Upload className=" h-4 w-4 shrink-0 " />
-              <span>Upload</span>
-            </>
-          )}
-        </Button>
-        <Button
-          disabled={isLoading}
-          variant="destructive"
-          className=" p-2 mr-2 cursor-pointer"
-        >
-          <Trash />
-        </Button>
-      </div>
-      {objects?.files
-        ?.filter((file) => file.Key !== name)
-        .filter(
-          (file) => file.Key && file.LastModified && file.Size !== undefined
-        )
-        .sort(
-          (a, b) =>
-            new Date(b.LastModified!).getTime() -
-            new Date(a.LastModified!).getTime()
-        )
-        .map((file, idx) => {
-          const fileName = file.Key?.split("/").pop() ?? file.Key;
-          return (
-            <AccordionContent
-              key={idx}
-              className="px-6 py-1 rounded-md text-balance"
-            >
-              <FileComponent
-                name={fileName}
-                link={file.Key}
-                size={file.Size}
-                time={file.LastModified}
-              />
-            </AccordionContent>
-          );
-        })}
-    </AccordionItem>
   );
 }
