@@ -30,8 +30,8 @@ A lightweight, web-based AWS S3 file manager built with dynamic credentials. Eas
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/s3-file-manager.git
-cd s3-file-manager
+git clone https://github.com/kishore-sv/s3-ui.git
+cd s3-ui
 ```
 
 ### 2. Install dependencies
