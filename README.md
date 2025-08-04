@@ -23,7 +23,7 @@ A lightweight, web-based AWS S3 file manager built with dynamic credentials. Eas
 
 ---
 
-![homepage](/public/home_dark.png)
+![homepage](https%3A%2F%2Fkishore-protfolio.s3.amazonaws.com%2Fd38caf43-450f-4417-9bd2-2d6f5b2f448b-home_dark.png)
 
 ## Getting Started
 
