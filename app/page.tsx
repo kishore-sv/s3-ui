@@ -16,6 +16,7 @@ export default function Home() {
             height={36}
             src="/logo.svg"
             alt="logo"
+            loading="eager"
             className="w-8 h-8 rounded bg-neutral-900"
           />
           <h1 className="text-xl font-semibold">S3 UI</h1>
@@ -55,12 +56,15 @@ export default function Home() {
                 AWS Console <ExternalLink className="h-3 w-3" />
               </Link>
               <p className="text-neutral-500">
-                After login, you'll land on the AWS console.
+                After login, you&apos;ll land on the AWS console.
               </p>
             </div>
-            <img
+            <Image
+              width="500"
+              height="500"
               src="/aws_signin.png"
               alt="aws_signin"
+              loading="eager"
               className="rounded-md border-1 border-neutral-500 shadow-sm w-full  object-cover"
             />
           </div>
@@ -79,13 +83,21 @@ export default function Home() {
               <ul className="space-y-3">
                 <li>
                   <strong>Step 1:</strong> User details
-                  <p className="dark:text-neutral-400 my-1 text-neutral-600">Give any username.</p>
+                  <p className="dark:text-neutral-400 my-1 text-neutral-600">
+                    Give any username.
+                  </p>
                 </li>
 
                 <li>
                   <strong>Step 2:</strong> Permissions
-                  <p className="dark:text-neutral-400 my-1 text-neutral-600">Add AmazonS3FullAccess.</p>
-                  <img
+                  <p className="dark:text-neutral-400 my-1 text-neutral-600">
+                    Add AmazonS3FullAccess.
+                  </p>
+                  <Image
+                    width="500"
+                    height="500"
+                    alt="premissions"
+                    loading="eager"
                     src="/permissions.png"
                     className="rounded-md mt-2 border-1 border-neutral-500 shadow-sm w-full  object-cover"
                   />
@@ -93,14 +105,19 @@ export default function Home() {
 
                 <li>
                   <strong>Step 3:</strong> Review
-                  <p className="dark:text-neutral-400 text-neutral-600">Get access + secret key.</p>
+                  <p className="dark:text-neutral-400 text-neutral-600">
+                    Get access + secret key.
+                  </p>
                 </li>
               </ul>
             </div>
 
-            <img
+            <Image
+              width="500"
+              height="500"
               src="/iam.png"
               alt="iam"
+              loading="eager"
               className="rounded-md shadow-sm w-full  object-cover"
             />
           </div>
@@ -116,7 +133,11 @@ export default function Home() {
               <ul className="space-y-3">
                 <li>
                   <strong>Step 1:</strong> Choose use-case
-                  <img
+                  <Image
+                    width="500"
+                    height="500"
+                    alt="access keys"
+                    loading="eager"
                     src="/access_keys_step_1.png"
                     className="rounded-md border-1 border-neutral-500 shadow-sm  mt-2 w-full  object-cover"
                   />
@@ -132,8 +153,11 @@ export default function Home() {
               </ul>
             </div>
 
-            <img
+            <Image
+              width="500"
+              height="500"
               src="/access_keys.png"
+              loading="eager"
               alt="keys"
               className="rounded-md  border-1 border-neutral-500 shadow-sm w-full object-cover"
             />
@@ -147,7 +171,11 @@ export default function Home() {
               </h1>
               <p className="text-neutral-500">Bucket name must be unique.</p>
 
-              <img
+              <Image
+                width="500"
+                height="500"
+                alt="create bucket"
+                loading="eager"
                 src="/create_bucket.png"
                 className="rounded-md border-1 border-neutral-500 shadow-sm object-cover"
               />
@@ -155,9 +183,12 @@ export default function Home() {
               <p className="">Disable block public access & set CORS.</p>
             </div>
 
-            <img
+            <Image
+              width="500"
+              height="500"
               src="/s3_search.png"
               alt="bucket"
+              loading="eager"
               className="rounded-md border-1 border-neutral-500 shadow-sm w-full object-cover"
             />
           </div>
@@ -184,7 +215,11 @@ export default function Home() {
               />
             </div>
 
-            <img
+            <Image
+              width="500"
+              height="500"
+              alt="cors"
+              loading="eager"
               src="/cors.png"
               className="rounded-md border-1 border-neutral-500 shadow-sm w-full object-cover"
             />
@@ -212,7 +247,11 @@ export default function Home() {
               />
             </div>
 
-            <img
+            <Image
+              width="500"
+              height="500"
+              alt="bucket policy"
+              loading="eager"
               src="/bucket_policy.png"
               className="rounded-md border-1 border-neutral-500 shadow-sm w-full object-cover"
             />
@@ -220,7 +259,7 @@ export default function Home() {
 
           {/* FOOTER */}
           <footer className="text-center space-y-3 pt-8 border-t">
-            <p>You're ready to go 🎉</p>
+            <p>You&apos;re ready to go 🎉</p>
 
             <a
               href="#"
@@ -231,7 +270,7 @@ export default function Home() {
             </a>
 
             <p className="text-xs text-neutral-500 max-w-md mx-auto">
-              Keys are never stored on our servers — only in your browser's
+              Keys are never stored on our servers — only in your browser&apos;s
               local storage.
             </p>
 

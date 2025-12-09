@@ -84,7 +84,7 @@ export default function S3page() {
     localStorage.removeItem("secrectAccessKey");
     localStorage.removeItem("bucketName");
     router.replace("/");
-    toast(` Signed Out succeefully! `);
+    toast(` Signed Out successsfully! `);
   };
 
   const handleUpload = async () => {
