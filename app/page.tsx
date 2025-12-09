@@ -10,7 +10,7 @@ export default function Home() {
       <nav className=" w-full h-18 lg:fixed top-0 gap-18 px-10 flex lg:justify-between items-center lg:px-20 py-2 bg-neutral-50/80 border-b dark:bg-neutral-950/80 backdrop-blur-md ">
         <div className=" w-50 h-full flex items-center ">
           <Link href="/">
-            <h1 className="text-3xl font-bold flex items-center gap-2 ">
+            <h1 className="text-3xl text-shadow-2xs text-shadow-blue-900 font-bold flex items-center gap-2 ">
               <Image
                 width={50}
                 height={50}
@@ -45,6 +45,7 @@ export default function Home() {
         className="w-full h-screen pt-20 lg:px-30 transition-transform ease-in-out"
       >
         <div className=" w-full border-x space-y-30 h-fit px-7 ">
+
           <div className=" flex flex-col lg:flex-row gap-4 items-center lg:justify-between ">
             <div className=" lg:w-[40%] gap-2 ">
               <h1 className=" text-xl font-semibold text-primary ">
@@ -57,7 +58,7 @@ export default function Home() {
               >
                 AWS Console <ExternalLink className=" h-4 w-4 shrink-0 " />{" "}
               </Link>
-              <p className=" text-neutral-400 text-sm ml-3 ">
+              <p className="text-neutral-400 text-sm ml-3 ">
                 After Signin/Signup , You will be landed to AWS Console.
               </p>
             </div>
@@ -248,7 +249,7 @@ export default function Home() {
             "DELETE"
         ],
         "AllowedOrigins": [
-            "http://localhost:3000"
+            "https://s3-ui.kishore-sv.me/"
         ],
         "ExposeHeaders": []
     }
@@ -325,9 +326,9 @@ export default function Home() {
               <ArrowUp className=" w-5 h-5 group-hover:-translate-y-1 transition-transform ease-in-out " />
             </a>
             <p className="text-sm my-2 text-center text-muted-foreground">
-              Don&rsquo;t worry! We never store your keys on our servers. They&rsquo;re
-              saved only in your browser&rsquo;s local storage — visible and
-              manageable by you alone.
+              Don&rsquo;t worry! We never store your keys on our servers.
+              They&rsquo;re saved only in your browser&rsquo;s local storage —
+              visible and manageable by you alone.
             </p>
             <div className=" flex justify-center border-t w-full pt-2 pb-4 items-center gap-4 mt-4 ">
               <Link

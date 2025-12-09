@@ -2,6 +2,9 @@
 
 A lightweight, web-based AWS S3 file manager built with dynamic credentials. Easily upload, browse, and delete files or folders in any S3 bucket using credentials stored in `localStorage`.
 
+**🚀 Live Demo**
+[🔗 https://s3-ui.kishore-sv.me](https://s3-ui.kishore-sv.me)
+
 ---
 
 ## ✨ Features
