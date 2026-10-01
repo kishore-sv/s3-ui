@@ -4,6 +4,7 @@ import S3KeysForm from "@/components/s3keysform";
 import { ArrowUp, ExternalLink, GithubIcon } from "lucide-react";
 import Image from "next/image";
 import CodeBlock from "@/components/CodeBlock";
+import { HomeAboutSection } from "@/components/home-about-section";
 
 export default function Home() {
   return (
@@ -36,6 +37,8 @@ export default function Home() {
           </div>
         </main>
       </section>
+
+      <HomeAboutSection />
 
       {/* DOCS */}
       <section id="demo" className="w-full py-10">
