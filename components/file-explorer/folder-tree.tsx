@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import { FolderPlus, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { FolderTreeItem } from "./folder-tree-item";
 import { SidebarLoadingState } from "./loading-state";
 import { useExplorer } from "./explorer-context";
@@ -29,8 +28,8 @@ export function FolderTree({
   }, [ensureExpanded]);
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between px-3 py-2">
+    <div className="flex min-h-0 flex-1 flex-col">
+      <div className="flex shrink-0 items-center justify-between px-3 py-2">
         <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
           Storage
         </span>
@@ -56,21 +55,19 @@ export function FolderTree({
         </div>
       </div>
 
-      <ScrollArea className="flex-1 min-w-0 px-1">
+      <div className="min-h-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-y-contain px-1 pb-2">
         {isLoading && !hasRootData ? (
           <SidebarLoadingState />
         ) : (
-          <>
-            <FolderTreeItem
-              path=""
-              depth={0}
-              onDelete={onDelete}
-              onNewFolder={onNewFolder}
-              onDeleteItem={onDeleteItem}
-            />
-          </>
+          <FolderTreeItem
+            path=""
+            depth={0}
+            onDelete={onDelete}
+            onNewFolder={onNewFolder}
+            onDeleteItem={onDeleteItem}
+          />
         )}
-      </ScrollArea>
+      </div>
     </div>
   );
 }

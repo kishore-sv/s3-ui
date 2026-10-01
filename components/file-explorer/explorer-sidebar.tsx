@@ -39,8 +39,11 @@ export function ExplorerSidebar({
         : "Error";
 
   return (
-    <Sidebar collapsible="icon" className="border-r relative">
-      <SidebarHeader className="border-b px-3 py-2">
+    <Sidebar
+      collapsible="icon"
+      className="!top-14 !bottom-0 !h-auto border-r"
+    >
+      <SidebarHeader className="shrink-0 border-b px-3 py-2">
         <div className="flex items-center gap-2 min-w-0 group-data-[collapsible=icon]:justify-center">
           <StorageProviderIcon provider={provider} size={20} />
           <div className="min-w-0 group-data-[collapsible=icon]:hidden">
@@ -53,14 +56,14 @@ export function ExplorerSidebar({
           </div>
         </div>
       </SidebarHeader>
-      <SidebarContent className="min-w-0 overflow-hidden">
+      <SidebarContent className="min-h-0 min-w-0 flex-1 overflow-hidden p-0">
         <FolderTree
           onDelete={onDelete}
           onNewFolder={onNewFolder}
           onDeleteItem={onDeleteItem}
         />
       </SidebarContent>
-      <SidebarFooter className="border-t p-3 group-data-[collapsible=icon]:hidden">
+      <SidebarFooter className="shrink-0 border-t p-3 group-data-[collapsible=icon]:hidden">
         <div className="flex items-center justify-between gap-2">
           <div className="min-w-0">
             <p className="text-xs text-muted-foreground">Storage Provider</p>
