@@ -33,7 +33,7 @@ function FileGridItem({
       <ContextMenuTrigger asChild>
         <div
           className={cn(
-            "group relative flex flex-col items-center gap-2 rounded-lg border p-4 cursor-pointer hover:bg-accent/50 transition-colors",
+            "group relative flex h-auto w-full flex-col items-center gap-2 self-start rounded-lg border p-4 cursor-pointer hover:bg-accent/50 transition-colors",
             isSelected && "bg-accent/50 border-primary/30"
           )}
           onClick={() => toggleSelection(item.key)}
@@ -117,7 +117,7 @@ export function FileGrid({
   }
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 p-4 overflow-auto flex-1">
+    <div className="grid auto-rows-min grid-cols-2 content-start items-start gap-3 overflow-auto p-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 flex-1 min-h-0">
       {filteredItems.map((item) => (
         <FileGridItem key={item.key} item={item} onDelete={onDelete} />
       ))}

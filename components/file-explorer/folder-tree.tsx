@@ -8,13 +8,16 @@ import { FolderTreeItem } from "./folder-tree-item";
 import { SidebarLoadingState } from "./loading-state";
 import { useExplorer } from "./explorer-context";
 import { useFolderTree } from "@/hooks/use-folder-tree";
+import type { ExplorerItem } from "@/types/explorer";
 
 export function FolderTree({
   onDelete,
   onNewFolder,
+  onDeleteItem,
 }: {
   onDelete: (path: string) => void;
   onNewFolder: (path: string) => void;
+  onDeleteItem: (item: ExplorerItem) => void;
 }) {
   const { isLoading, refreshCurrentFolder, setNewFolderOpen, folderCache } =
     useExplorer();
@@ -53,7 +56,7 @@ export function FolderTree({
         </div>
       </div>
 
-      <ScrollArea className="flex-1 px-1">
+      <ScrollArea className="flex-1 min-w-0 px-1">
         {isLoading && !hasRootData ? (
           <SidebarLoadingState />
         ) : (
@@ -63,6 +66,7 @@ export function FolderTree({
               depth={0}
               onDelete={onDelete}
               onNewFolder={onNewFolder}
+              onDeleteItem={onDeleteItem}
             />
           </>
         )}

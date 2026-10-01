@@ -97,6 +97,7 @@ function FileExplorerInner() {
         <ExplorerSidebar
           onDelete={handleSidebarDelete}
           onNewFolder={handleSidebarNewFolder}
+          onDeleteItem={handleDelete}
         />
         <SidebarInset className="flex flex-col min-h-0">
           <ExplorerBreadcrumbs />

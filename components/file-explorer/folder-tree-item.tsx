@@ -19,20 +19,24 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { FileIcon } from "./file-icon";
 import { FileTreeItem } from "./file-tree-item";
+import { TreeItemName } from "./tree-item-name";
 import { useExplorer } from "./explorer-context";
 import { useFolderTree } from "@/hooks/use-folder-tree";
 import { getDisplayName } from "@/utils/formatExplorer";
+import type { ExplorerItem } from "@/types/explorer";
 
 export function FolderTreeItem({
   path,
   depth = 0,
   onDelete,
   onNewFolder,
+  onDeleteItem,
 }: {
   path: string;
   depth?: number;
   onDelete: (path: string) => void;
   onNewFolder: (path: string) => void;
+  onDeleteItem: (item: ExplorerItem) => void;
 }) {
   const { currentPath, navigateTo } = useExplorer();
   const {
@@ -45,6 +49,7 @@ export function FolderTreeItem({
   } = useFolderTree();
 
   const name = path === "" ? "Root" : getDisplayName(path);
+  const fullTitle = path === "" ? "Root" : path;
   const isExpanded = expandedFolders.has(path);
   const isSelected = currentPath === path;
   const childFolders = isExpanded ? getChildren(path) : [];
@@ -61,12 +66,12 @@ export function FolderTreeItem({
   };
 
   return (
-    <div>
+    <div className="min-w-0">
       <ContextMenu>
         <ContextMenuTrigger asChild>
           <div
             className={cn(
-              "group flex items-center gap-0.5 rounded-md px-1 py-1 text-sm cursor-pointer hover:bg-accent",
+              "group flex w-full min-w-0 items-center gap-0.5 overflow-hidden rounded-md px-1 py-1 text-sm cursor-pointer hover:bg-accent",
               isSelected && "bg-accent font-medium"
             )}
             style={{ paddingLeft: `${depth * 12 + 4}px` }}
@@ -90,16 +95,17 @@ export function FolderTreeItem({
               name={name}
               type="folder"
               isOpen={isExpanded}
-              className="h-3.5 w-3.5"
+              className="h-3.5 w-3.5 shrink-0"
             />
-            <span className="truncate flex-1 min-w-0">{name}</span>
+            <TreeItemName name={name} title={fullTitle} />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-5 w-5 opacity-0 group-hover:opacity-100 shrink-0"
+                  className="h-5 w-5 shrink-0"
                   onClick={(e) => e.stopPropagation()}
+                  aria-label={`Actions for ${name}`}
                 >
                   <MoreHorizontal className="h-3 w-3" />
                 </Button>
@@ -156,10 +162,16 @@ export function FolderTreeItem({
               depth={depth + 1}
               onDelete={onDelete}
               onNewFolder={onNewFolder}
+              onDeleteItem={onDeleteItem}
             />
           ))}
           {childFiles.map((file) => (
-            <FileTreeItem key={file.key} file={file} depth={depth + 1} />
+            <FileTreeItem
+              key={file.key}
+              file={file}
+              depth={depth + 1}
+              onDeleteItem={onDeleteItem}
+            />
           ))}
         </>
       )}

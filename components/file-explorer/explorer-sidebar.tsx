@@ -13,13 +13,16 @@ import { FolderTree } from "./folder-tree";
 import { SidebarResizeHandle } from "./sidebar-resize-handle";
 import { useExplorer } from "./explorer-context";
 import { getDisplayName } from "@/utils/formatExplorer";
+import type { ExplorerItem } from "@/types/explorer";
 
 export function ExplorerSidebar({
   onDelete,
   onNewFolder,
+  onDeleteItem,
 }: {
   onDelete: (path: string) => void;
   onNewFolder: (path: string) => void;
+  onDeleteItem: (item: ExplorerItem) => void;
 }) {
   const {
     storageConfig,
@@ -50,8 +53,12 @@ export function ExplorerSidebar({
           </div>
         </div>
       </SidebarHeader>
-      <SidebarContent>
-        <FolderTree onDelete={onDelete} onNewFolder={onNewFolder} />
+      <SidebarContent className="min-w-0 overflow-hidden">
+        <FolderTree
+          onDelete={onDelete}
+          onNewFolder={onNewFolder}
+          onDeleteItem={onDeleteItem}
+        />
       </SidebarContent>
       <SidebarFooter className="border-t p-3 group-data-[collapsible=icon]:hidden">
         <div className="flex items-center justify-between gap-2">

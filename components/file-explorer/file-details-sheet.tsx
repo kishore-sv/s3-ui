@@ -38,14 +38,14 @@ export function FileDetailsSheet() {
       open={!!detailsItem}
       onOpenChange={(open) => !open && setDetailsItem(null)}
     >
-      <SheetContent className="w-full sm:max-w-md">
-        <SheetHeader>
-          <SheetTitle className="truncate">{detailsItem.name}</SheetTitle>
+      <SheetContent className="flex w-full flex-col overflow-hidden p-0 sm:max-w-md">
+        <SheetHeader className="shrink-0 border-b px-6 pt-6 pb-4">
+          <SheetTitle className="truncate pr-8">{detailsItem.name}</SheetTitle>
           <SheetDescription>
             {detailsItem.type === "folder" ? "Folder" : "File"} details
           </SheetDescription>
         </SheetHeader>
-        <div className="space-y-4 mt-4">
+        <div className="flex-1 space-y-4 overflow-y-auto px-6 py-5">
           <DetailRow
             label="Type"
             value={
