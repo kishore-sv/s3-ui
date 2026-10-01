@@ -16,6 +16,11 @@ import {
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import {
+  detectProvider,
+  getProviderInfo,
+  saveStorageConfigToLocalStorage,
+} from "@/utils/storageConfig";
 
 const formSchema = z.object({
   bucketName: z.string().nonempty({ message: "Bucket Name is required." }),
@@ -24,6 +29,7 @@ const formSchema = z.object({
     .string()
     .nonempty({ message: "SECRECT ACCESS KEY is required." }),
   region: z.string().nonempty({ message: "REGION is required." }),
+  endpoint: z.string().optional(),
 });
 
 export default function S3KeysForm() {
@@ -34,22 +40,39 @@ export default function S3KeysForm() {
       accessKey: "",
       secrectAccessKey: "",
       region: "",
+      endpoint: "",
     },
   });
 
   const router = useRouter();
+  const endpointValue = form.watch("endpoint");
+  const detectedProvider = detectProvider({
+    region: form.watch("region") || "",
+    accessKeyId: form.watch("accessKey") || "",
+    secretAccessKey: form.watch("secrectAccessKey") || "",
+    bucketName: form.watch("bucketName") || "",
+    endpoint: endpointValue,
+  });
+  const providerInfo = getProviderInfo(detectedProvider);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    localStorage.setItem("bucketName", values.bucketName);
-    localStorage.setItem("accessKey", values.accessKey);
-    localStorage.setItem("secrectAccessKey", values.secrectAccessKey);
-    localStorage.setItem("region", values.region);
-    console.log("Saved to localStorage:", values);
+    saveStorageConfigToLocalStorage({
+      bucketName: values.bucketName,
+      accessKeyId: values.accessKey,
+      secretAccessKey: values.secrectAccessKey,
+      region: values.region,
+      endpoint: values.endpoint?.trim() || undefined,
+    });
     router.push("/s3");
   }
+
   return (
     <div className="bg-neutral-50/20 dark:bg-neutral-950/50 border px-10 pb-4 pt-2 rounded-md mt-10 flex flex-col gap-4 justify-center items-center">
       <h1>Welcome to S3 UI</h1>
+      <p className="text-sm text-neutral-500 text-center max-w-md">
+        Connect to AWS S3, MinIO, Cloudflare R2, Supabase, or any S3-compatible
+        storage.
+      </p>
 
       <Form {...form}>
         <form
@@ -63,7 +86,7 @@ export default function S3KeysForm() {
               <FormItem>
                 <FormLabel>Bucket Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="your s3 bucket name" {...field} />
+                  <Input placeholder="your bucket name" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -76,7 +99,7 @@ export default function S3KeysForm() {
               <FormItem>
                 <FormLabel>ACCESS KEY</FormLabel>
                 <FormControl>
-                  <Input placeholder="your s3 access key" {...field} />
+                  <Input placeholder="your access key" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -90,7 +113,7 @@ export default function S3KeysForm() {
               <FormItem>
                 <FormLabel>SECRECT ACCESS KEY</FormLabel>
                 <FormControl>
-                  <Input placeholder="your s3 secrect access key" {...field} />
+                  <Input placeholder="your secret access key" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -104,12 +127,45 @@ export default function S3KeysForm() {
               <FormItem>
                 <FormLabel>REGION</FormLabel>
                 <FormControl>
-                  <Input placeholder="eu-north-1" {...field} />
+                  <Input placeholder="eu-north-1 or auto" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+
+          <FormField
+            control={form.control}
+            name="endpoint"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Endpoint URL (Optional)</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="http://localhost:9000 (MinIO) or leave empty for AWS S3"
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>
+                  Required for MinIO, Cloudflare R2, Supabase. Leave empty for
+                  AWS S3.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {endpointValue?.trim() && (
+            <p className="text-sm text-neutral-500">
+              Detected provider:{" "}
+              <span
+                className="font-medium"
+                style={{ color: providerInfo.color }}
+              >
+                {providerInfo.name}
+              </span>
+            </p>
+          )}
 
           <Button type="submit">Continue</Button>
         </form>

@@ -4,7 +4,7 @@ A lightweight, web-based AWS S3 file manager built with dynamic credentials. Eas
 
 **🚀 Live Demo**
 
-[🔗 https://s3-ui.kishore-sv.me](https://s3-ui.kishore-sv.me)
+[🔗 https://s3-ui-ten.vercel.app/](https://s3-ui-ten.vercel.app/)
 
 ---
 
@@ -72,6 +72,6 @@ yarn dev
 
 4. Upload or delete files with one click.
 
-That's it — you're all set! ✅ Done and dusted.
+That's it - you're all set! ✅ Done and dusted.
 
-``Don't worry! We never store your keys on our servers. They'resaved only in your browser's local storage — visible an manageable by you alone.``
+``Don't worry! We never store your keys on our servers. They'resaved only in your browser's local storage - visible an manageable by you alone.``

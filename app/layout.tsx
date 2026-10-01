@@ -3,13 +3,15 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Inter } from 'next/font/google'
 import { Toaster } from "sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const inter = Inter({ weight: ["200","300","400","500","600","700","800"], subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: "AWS S3 Ui",
-  description: "Simple s3 ui for s3 CURD operations on s3",
-  icons:'logo.svg'
+  title: "S3 UI - Multi-Provider Storage Manager",
+  description:
+    "Simple UI for S3-compatible storage - AWS S3, MinIO, Cloudflare R2, Supabase, and more.",
+  icons: "logo.svg",
 };
 
 export default function RootLayout({
@@ -28,8 +30,10 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-             <Toaster richColors position="top-center" />
+            <TooltipProvider>
+             <Toaster closeButton={true} richColors position="top-center" />
         {children}
+            </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -40,8 +40,83 @@ export default function Home() {
       {/* DOCS */}
       <section id="demo" className="w-full py-10">
         <div className="mx-auto max-w-6xl px-4 space-y-16">
+          {/* S3-Compatible Providers */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 border-b-2 pb-4 gap-6 items-start">
+            <div className="space-y-4">
+              <h1 className="text-lg flex items-center gap-2 font-semibold text-primary">
+                <RoundedStep step="★" />
+                S3-Compatible Providers
+              </h1>
+              <p className="text-neutral-500">
+                This UI works with any S3-compatible storage. Leave the endpoint
+                empty for AWS S3, or fill it in for other providers.
+              </p>
+
+              <div className="space-y-3">
+                <h2 className="font-semibold">MinIO (local)</h2>
+                <CodeBlock
+                  language="env"
+                  code={`Bucket Name: erp-storage
+Access Key: minioadmin
+Secret Key: minioadmin
+Region: eu-north-1
+Endpoint: http://localhost:9000`}
+                />
+
+                <h2 className="font-semibold">Cloudflare R2</h2>
+                <CodeBlock
+                  language="env"
+                  code={`Bucket Name: my-bucket
+Access Key: <R2 access key>
+Secret Key: <R2 secret key>
+Region: auto
+Endpoint: https://<account_id>.r2.cloudflarestorage.com`}
+                />
+
+                <h2 className="font-semibold">Supabase Storage</h2>
+                <CodeBlock
+                  language="env"
+                  code={`Bucket Name: my-bucket
+Access Key: <project ref>
+Secret Key: <service role or s3 key>
+Region: us-east-1
+Endpoint: https://<project_ref>.supabase.co/storage/v1/s3`}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <h2 className="font-semibold text-primary">Supported Providers</h2>
+              <ul className="space-y-2 text-neutral-600 dark:text-neutral-400">
+                <li>
+                  <strong>AWS S3</strong> - leave endpoint empty, use your AWS
+                  region and IAM keys
+                </li>
+                <li>
+                  <strong>MinIO</strong> - set endpoint to your MinIO server
+                  (e.g. http://localhost:9000)
+                </li>
+                <li>
+                  <strong>Cloudflare R2</strong> - use your R2 S3 API endpoint
+                </li>
+                <li>
+                  <strong>Supabase Storage</strong> - use the S3-compatible
+                  endpoint from project settings
+                </li>
+                <li>
+                  <strong>Other S3-compatible</strong> - DigitalOcean Spaces,
+                  Backblaze B2, Wasabi, etc.
+                </li>
+              </ul>
+              <p className="text-xs text-neutral-500">
+                The UI auto-detects your provider from the endpoint and shows
+                the matching branding on the bucket page.
+              </p>
+            </div>
+          </div>
+
           {/* BLOCK TEMPLATE */}
-          {/* 1 — AWS Account */}
+          {/* 1 - AWS Account */}
           <div className="grid grid-cols-1 lg:grid-cols-2 border-b-2 pb-4 gap-6 items-center">
             <div className="space-y-2">
               <h1 className="text-lg flex items-center gap-2 font-semibold text-primary">
@@ -69,7 +144,7 @@ export default function Home() {
             />
           </div>
 
-          {/* 2 — IAM User */}
+          {/* 2 - IAM User */}
           <div className="grid grid-cols-1 lg:grid-cols-2 border-b-2 pb-4 gap-6 items-start">
             <div className="space-y-2">
               <h1 className="text-lg flex items-center gap-2 font-semibold text-primary">
@@ -122,7 +197,7 @@ export default function Home() {
             />
           </div>
 
-          {/* 3 — Access Keys */}
+          {/* 3 - Access Keys */}
           <div className="grid grid-cols-1 lg:grid-cols-2 border-b-2 pb-4 gap-6 items-start">
             <div className="space-y-2">
               <h1 className="text-lg flex items-center gap-2 font-semibold text-primary">
@@ -163,7 +238,7 @@ export default function Home() {
             />
           </div>
 
-          {/* 4 — S3 Bucket */}
+          {/* 4 - S3 Bucket */}
           <div className="grid grid-cols-1 lg:grid-cols-2 border-b-2 pb-4 gap-6 items-start">
             <div className="space-y-2">
               <h1 className="text-lg flex items-center gap-2 font-semibold text-primary">
@@ -193,7 +268,7 @@ export default function Home() {
             />
           </div>
 
-          {/* 5 — CORS */}
+          {/* 5 - CORS */}
           <div className="grid grid-cols-1 lg:grid-cols-2 border-b-2 pb-4 gap-6 items-start">
             <div className="space-y-2">
               <h1 className="text-lg flex items-center gap-2 font-semibold text-primary">
@@ -225,7 +300,7 @@ export default function Home() {
             />
           </div>
 
-          {/* 6 — Policy */}
+          {/* 6 - Policy */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
             <div className="space-y-2">
               <h1 className="text-lg flex items-center gap-2 font-semibold text-primary">
@@ -270,7 +345,7 @@ export default function Home() {
             </a>
 
             <p className="text-xs text-neutral-500 max-w-md mx-auto">
-              Keys are never stored on our servers — only in your browser&apos;s
+              Keys are never stored on our servers - only in your browser&apos;s
               local storage.
             </p>
 

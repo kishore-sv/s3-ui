@@ -1,28 +1,48 @@
-import { ListObjectsV2Command, DeleteObjectsCommand } from "@aws-sdk/client-s3";
+import {
+  ListObjectsV2Command,
+  DeleteObjectsCommand,
+} from "@aws-sdk/client-s3";
 import { getS3Client } from "@/utils/s3Client";
+import { type StorageConfig } from "@/utils/storageConfig";
 
- export const  deleteFolder = async (folderPrefix: string, s3Keys: any) => {
+export const deleteFolder = async (
+  folderPrefix: string,
+  s3Keys: StorageConfig
+) => {
   const s3 = getS3Client(s3Keys);
+  const prefix = folderPrefix.endsWith("/")
+    ? folderPrefix
+    : `${folderPrefix}/`;
 
-  const listCommand = new ListObjectsV2Command({
-    Bucket: s3Keys.bucketName,
-    Prefix: folderPrefix,
-  });
+  let continuationToken: string | undefined;
 
-  const listedObjects = await s3.send(listCommand);
+  do {
+    const listCommand = new ListObjectsV2Command({
+      Bucket: s3Keys.bucketName,
+      Prefix: prefix,
+      ContinuationToken: continuationToken,
+    });
 
-  if (!listedObjects.Contents || listedObjects.Contents.length === 0) return;
+    const listedObjects = await s3.send(listCommand);
 
-  const objectsToDelete = listedObjects.Contents.map(obj => ({ Key: obj.Key }));
+    if (!listedObjects.Contents || listedObjects.Contents.length === 0) {
+      continuationToken = listedObjects.NextContinuationToken;
+      continue;
+    }
 
-  const deleteCommand = new DeleteObjectsCommand({
-    Bucket: s3Keys.bucketName,
-    Delete: {
-      Objects: objectsToDelete,
-      Quiet: false,
-    },
-  });
+    const objectsToDelete = listedObjects.Contents.map((obj) => ({
+      Key: obj.Key,
+    }));
 
-  await s3.send(deleteCommand);
-  console.log(`✅ Deleted folder: ${folderPrefix}`);
+    const deleteCommand = new DeleteObjectsCommand({
+      Bucket: s3Keys.bucketName,
+      Delete: {
+        Objects: objectsToDelete,
+        Quiet: false,
+      },
+    });
+
+    await s3.send(deleteCommand);
+    continuationToken = listedObjects.NextContinuationToken;
+  } while (continuationToken);
 };
